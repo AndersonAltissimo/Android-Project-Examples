@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Idade de Cachorro</string>
+    <string name="lblInforme">Digite a idade do seu Cachorro, para descobrir a idade dele em anos Humanos</string>
+    <string name="descobrir_idade">Descobrir Idade</string>
+</resources>

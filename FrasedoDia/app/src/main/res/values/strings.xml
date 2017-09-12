@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Frase do Dia</string>
+    <string name="btnFrase">Nova Frase</string>
+    <string name="FrasedoDia">Frase do Dia</string>
+</resources>

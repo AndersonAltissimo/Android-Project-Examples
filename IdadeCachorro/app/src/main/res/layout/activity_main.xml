@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.andersonaltissimo.idadecachorro.MainActivity"
+    android:background="@color/backgroundApp">
+
+    <ImageView
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:id="@+id/img"
+        android:background="@drawable/cachorro"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"/>
+
+    <TextView
+        android:id="@+id/lblInforme"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/lblInforme"
+        android:layout_below="@+id/img"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="30dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:textSize="16sp"
+        android:padding="10dp"
+        android:textColor="#FFFFFF"
+        android:background="#34bfb8" />
+
+    <EditText
+        android:id="@+id/edIdade"
+        android:layout_width="150dp"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/lblInforme"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/btnDescobrirIdade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/edIdade"
+        android:layout_centerHorizontal="true"
+        android:text="@string/descobrir_idade"
+        android:layout_marginTop="20dp" />
+
+    <TextView
+        android:id="@+id/lblResultado"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/btnDescobrirIdade"
+        tools:text="Anderson Altissimo"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="25dp"
+        android:textSize="20sp"/>
+</RelativeLayout>
