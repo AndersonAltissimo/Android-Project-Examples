@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="br.com.andersonaltissimo.adivinha.MainActivity">
+
+    <TextView
+        android:id="@+id/lbltext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="10dp"
+        android:textSize="25sp"
+        android:text="@string/selectnumber" />
+
+    <Button
+        android:id="@+id/btnJogar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btnJogar"
+        android:textSize="16sp"
+        android:layout_marginTop="60dp"
+        android:layout_below="@+id/lbltext"
+        android:layout_alignLeft="@+id/lbltext"
+        android:layout_alignStart="@+id/lbltext"
+        android:layout_alignRight="@+id/lbltext"
+        android:layout_alignEnd="@+id/lbltext" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/btnJogar"
+        android:id="@+id/lblResultado"
+        android:text="@string/textNro"
+        android:textSize="25sp"
+        android:layout_marginTop="20dp"
+        android:layout_centerHorizontal="true"/>
+
+</RelativeLayout>
