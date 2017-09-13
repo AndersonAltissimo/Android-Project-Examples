@@ -2,6 +2,7 @@ package com.devmasterteam.photicker.views;
 
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -10,15 +11,20 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.devmasterteam.photicker.R;
-import com.devmasterteam.phototicker.utils.ImageUtil;
+import com.devmasterteam.photicker.utils.LongEventType;
+import com.devmasterteam.photicker.utils.ImageUtil;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements View.OnClickListener {
+public class MainActivity extends AppCompatActivity
+        implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
 
     private final ViewHolder vh = new ViewHolder();
     private ImageView imageSelected;
+    private boolean autoIncrement;
+    private LongEventType longEventType;
+    private Handler repeatUpdateHandler = new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +79,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         findViewById(R.id.btnRotateRight).setOnClickListener(this);
         findViewById(R.id.btnFinish).setOnClickListener(this);
         findViewById(R.id.btnRemove).setOnClickListener(this);
+
+        findViewById(R.id.btnZoomIn).setOnLongClickListener(this);
+        findViewById(R.id.btnZoomOut).setOnLongClickListener(this);
+        findViewById(R.id.btnRotateLeft).setOnLongClickListener(this);
+        findViewById(R.id.btnRotateRight).setOnLongClickListener(this);
+
+
+        findViewById(R.id.btnZoomIn).setOnTouchListener(this);
+        findViewById(R.id.btnZoomOut).setOnTouchListener(this);
+        findViewById(R.id.btnRotateLeft).setOnTouchListener(this);
+        findViewById(R.id.btnRotateRight).setOnTouchListener(this);
+
     }
 
     private View.OnClickListener onClickImageOption(final RelativeLayout relativeLayout, final Integer imageId, int width, int heigth) {
@@ -164,6 +182,45 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     }
 
+    @Override
+    public boolean onLongClick(View v) {
+
+        switch (v.getId()) {
+            case R.id.btnZoomIn:
+                this.longEventType = LongEventType.ZoomIn;
+                break;
+            case R.id.btnZoomOut:
+                this.longEventType = LongEventType.ZoomOut;
+                break;
+
+            case R.id.btnRotateLeft:
+                this.longEventType = LongEventType.RotateLeft;
+                break;
+
+            case R.id.btnRotateRight:
+                this.longEventType = LongEventType.RotateRight;
+                break;
+        }
+        autoIncrement = true;
+
+        new RptUpdater().run();
+        return false;
+    }
+
+    @Override
+    public boolean onTouch(View v, MotionEvent event) {
+        int id = v.getId();
+
+        if (id == R.id.btnZoomIn || id == R.id.btnZoomOut || id == R.id.btnRotateLeft || id == R.id.btnRotateRight){
+            if (event.getAction() == MotionEvent.ACTION_UP && autoIncrement){
+                autoIncrement = false;
+                this.longEventType = null;
+            }
+        }
+
+        return false;
+    }
+
     private static class ViewHolder {
         LinearLayout linearSharePanel;
         LinearLayout linearControlPanel;
@@ -176,5 +233,31 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         ImageView btnRemove;
 
         RelativeLayout relativePhotoContent;
+    }
+
+    private class RptUpdater implements Runnable{
+
+        @Override
+        public void run() {
+            if (autoIncrement){
+                repeatUpdateHandler.postDelayed(new RptUpdater(), 50);
+            }
+
+            if (longEventType != null){
+                switch (longEventType){
+                    case ZoomIn:
+                        ImageUtil.handleZoomIn(imageSelected);
+                    case ZoomOut:
+                        ImageUtil.handleZoomOut(imageSelected);
+                        break;
+                    case RotateLeft:
+                        ImageUtil.handleRotateLeft(imageSelected);
+                        break;
+                    case RotateRight:
+                        ImageUtil.handleRotateRight(imageSelected);
+                        break;
+                }
+            }
+        }
     }
 }

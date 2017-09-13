@@ -1,4 +1,4 @@
-package com.devmasterteam.phototicker.utils;
+package com.devmasterteam.photicker.utils;
 
 import android.content.res.Resources;
 import android.graphics.Bitmap;
