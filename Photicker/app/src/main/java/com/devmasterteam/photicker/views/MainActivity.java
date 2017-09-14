@@ -23,6 +23,7 @@ import com.devmasterteam.photicker.R;
 import com.devmasterteam.photicker.utils.ImageUtil;
 import com.devmasterteam.photicker.utils.LongEventType;
 import com.devmasterteam.photicker.utils.PermitionUtil;
+import com.devmasterteam.photicker.utils.SocialUtil;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,13 +51,13 @@ public class MainActivity extends AppCompatActivity
         List<Integer> lstImages;
         lstImages = ImageUtil.getImageList();
 
-        this.vh.relativePhotoContent  = (RelativeLayout) findViewById(R.id.relativePhotoContentDraw);
+        this.vh.relativePhotoContent = (RelativeLayout) findViewById(R.id.relativePhotoContentDraw);
         final LinearLayout linearContent = (LinearLayout) findViewById(R.id.linearScrollContent);
 
-        for (Integer imageId: lstImages) {
+        for (Integer imageId : lstImages) {
             ImageView image = new ImageView(this);
-            image.setImageBitmap(ImageUtil.decodeSampledBitmapFromResource(getResources(), imageId, 70,70));
-            image.setPadding(20,10,20,10);
+            image.setImageBitmap(ImageUtil.decodeSampledBitmapFromResource(getResources(), imageId, 70, 70));
+            image.setPadding(20, 10, 20, 10);
 
             BitmapFactory.Options dimensions = new BitmapFactory.Options();
             dimensions.inJustDecodeBounds = true;
@@ -72,6 +73,12 @@ public class MainActivity extends AppCompatActivity
 
         this.vh.linearControlPanel = (LinearLayout) findViewById(R.id.LinearControlPanel);
         this.vh.linearSharePanel = (LinearLayout) findViewById(R.id.LinearSharePanel);
+
+        this.vh.btnInstagram = (ImageView) findViewById(R.id.imgInstagram);
+        this.vh.btnFacebook = (ImageView) findViewById(R.id.imgFacebook);
+        this.vh.btnTwitter = (ImageView) findViewById(R.id.imgTwitter);
+        this.vh.btnWhatsapp = (ImageView) findViewById(R.id.imgWhatsapp);
+
         this.vh.btnZoomIn = (ImageView) findViewById(R.id.btnZoomIn);
         this.vh.btnZoomOut = (ImageView) findViewById(R.id.btnZoomOut);
         this.vh.btnRotateLeft = (ImageView) findViewById(R.id.btnRotateLeft);
@@ -88,6 +95,11 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setListeners() {
+        findViewById(R.id.imgFacebook).setOnClickListener(this);
+        findViewById(R.id.imgTwitter).setOnClickListener(this);
+        findViewById(R.id.imgInstagram).setOnClickListener(this);
+        findViewById(R.id.imgWhatsapp).setOnClickListener(this);
+
         findViewById(R.id.btnZoomIn).setOnClickListener(this);
         findViewById(R.id.btnZoomOut).setOnClickListener(this);
         findViewById(R.id.btnRotateLeft).setOnClickListener(this);
@@ -125,29 +137,29 @@ public class MainActivity extends AppCompatActivity
 
                 toggleControlPainel(true);
 
-                image.setOnTouchListener(new View.OnTouchListener(){
+                image.setOnTouchListener(new View.OnTouchListener() {
                     @Override
                     public boolean onTouch(View v, MotionEvent event) {
 
                         float x, y;
 
-                        switch (event.getAction()){
+                        switch (event.getAction()) {
                             case MotionEvent.ACTION_DOWN:
                                 imageSelected = image;
                                 toggleControlPainel(true);
                                 break;
 
                             case MotionEvent.ACTION_MOVE:
-                                int coords[] = {0,0};
+                                int coords[] = {0, 0};
                                 relativeLayout.getLocationOnScreen(coords);
 
-                                x = (event.getRawX() - (image.getWidth()/2));
-                                y = (event.getRawY() - (coords[1] + 100) + (image.getHeight() /2));
+                                x = (event.getRawX() - (image.getWidth() / 2));
+                                y = (event.getRawY() - (coords[1] + 100) + (image.getHeight() / 2));
                                 image.setX(x);
                                 image.setY(y);
                                 break;
 
-                            case  MotionEvent.ACTION_UP:
+                            case MotionEvent.ACTION_UP:
                                 break;
                         }
                         return true;
@@ -158,7 +170,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void toggleControlPainel(boolean showControls) {
-        if (showControls){
+        if (showControls) {
             this.vh.linearControlPanel.setVisibility(View.VISIBLE);
             this.vh.linearSharePanel.setVisibility(View.GONE);
         } else {
@@ -170,9 +182,8 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onClick(View v) {
 
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.imgTakePhoto:
-
                 if (!PermitionUtil.hasCameraPermition(this)) {
                     PermitionUtil.asksCameraPermitions(this);
                 } else {
@@ -203,12 +214,28 @@ public class MainActivity extends AppCompatActivity
             case R.id.btnRemove:
                 this.vh.relativePhotoContent.removeView(this.imageSelected);
                 break;
+
+            case R.id.imgFacebook:
+                SocialUtil.shareImageOnFacebook(this, this.vh.relativePhotoContent, v);
+                break;
+
+            case R.id.imgInstagram:
+                SocialUtil.shareImageOnInstagram(this, this.vh.relativePhotoContent, v);
+                break;
+
+            case R.id.imgTwitter:
+                SocialUtil.shareImageOnTwitter(this, this.vh.relativePhotoContent, v);
+                break;
+
+            case R.id.imgWhatsapp:
+                SocialUtil.shareImageOnWhatsapp(this, this.vh.relativePhotoContent, v);
+                break;
         }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PermitionUtil.CAMERA_PERMISSION && resultCode == RESULT_OK){
+        if (requestCode == PermitionUtil.CAMERA_PERMISSION && resultCode == RESULT_OK) {
             this.setPhotoAsBackground();
         }
     }
@@ -224,7 +251,7 @@ public class MainActivity extends AppCompatActivity
         int photoW = options.outWidth;
         int photoH = options.outHeight;
 
-        int scaleFactor = Math.min(photoW/targetW, photoH / targetH);
+        int scaleFactor = Math.min(photoW / targetW, photoH / targetH);
 
         options.inJustDecodeBounds = false;
         options.inSampleSize = scaleFactor;
@@ -237,8 +264,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        if (requestCode == PermitionUtil.CAMERA_PERMISSION){
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+        if (requestCode == PermitionUtil.CAMERA_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 dispatchTakePictureIntent();
             } else {
                 new AlertDialog.Builder(this)
@@ -256,7 +283,7 @@ public class MainActivity extends AppCompatActivity
     private void dispatchTakePictureIntent() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 
-        if (intent.resolveActivity(getPackageManager()) != null){
+        if (intent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
 
             try {
@@ -266,7 +293,7 @@ public class MainActivity extends AppCompatActivity
                 Toast.makeText(this, "Não foi possivel iniciar a Camera.", Toast.LENGTH_SHORT).show();
             }
 
-            if (photoFile != null){
+            if (photoFile != null) {
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
                 startActivityForResult(intent, REQUEST_TAKE_PHOTO);
             }
@@ -303,8 +330,8 @@ public class MainActivity extends AppCompatActivity
     public boolean onTouch(View v, MotionEvent event) {
         int id = v.getId();
 
-        if (id == R.id.btnZoomIn || id == R.id.btnZoomOut || id == R.id.btnRotateLeft || id == R.id.btnRotateRight){
-            if (event.getAction() == MotionEvent.ACTION_UP && autoIncrement){
+        if (id == R.id.btnZoomIn || id == R.id.btnZoomOut || id == R.id.btnRotateLeft || id == R.id.btnRotateRight) {
+            if (event.getAction() == MotionEvent.ACTION_UP && autoIncrement) {
                 autoIncrement = false;
                 this.longEventType = null;
             }
@@ -316,6 +343,11 @@ public class MainActivity extends AppCompatActivity
     private static class ViewHolder {
         LinearLayout linearSharePanel;
         LinearLayout linearControlPanel;
+
+        ImageView btnInstagram;
+        ImageView btnFacebook;
+        ImageView btnTwitter;
+        ImageView btnWhatsapp;
 
         ImageView btnZoomIn;
         ImageView btnZoomOut;
@@ -329,16 +361,16 @@ public class MainActivity extends AppCompatActivity
         Uri uriPhotoPath;
     }
 
-    private class RptUpdater implements Runnable{
+    private class RptUpdater implements Runnable {
 
         @Override
         public void run() {
-            if (autoIncrement){
+            if (autoIncrement) {
                 repeatUpdateHandler.postDelayed(new RptUpdater(), 50);
             }
 
-            if (longEventType != null){
-                switch (longEventType){
+            if (longEventType != null) {
+                switch (longEventType) {
                     case ZoomIn:
                         ImageUtil.handleZoomIn(imageSelected);
                     case ZoomOut:

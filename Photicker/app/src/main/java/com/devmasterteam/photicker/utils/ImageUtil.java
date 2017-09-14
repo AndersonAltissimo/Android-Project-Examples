@@ -11,6 +11,7 @@ import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 
 import com.devmasterteam.photicker.R;
 import com.devmasterteam.photicker.views.MainActivity;
@@ -219,5 +220,10 @@ public class ImageUtil {
         img.recycle();
 
         return rotatedImg;
+    }
+
+    public static Bitmap drawBitmap(RelativeLayout relativePhotoContent) {
+
+    
     }
 }
