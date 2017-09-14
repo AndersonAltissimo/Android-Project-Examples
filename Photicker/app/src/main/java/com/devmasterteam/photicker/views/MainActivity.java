@@ -3,6 +3,7 @@ package com.devmasterteam.photicker.views;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,13 +20,12 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.devmasterteam.photicker.R;
-import com.devmasterteam.photicker.utils.LongEventType;
 import com.devmasterteam.photicker.utils.ImageUtil;
+import com.devmasterteam.photicker.utils.LongEventType;
 import com.devmasterteam.photicker.utils.PermitionUtil;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity
         getSupportActionBar().setDisplayShowHomeEnabled(true);
         getSupportActionBar().setIcon(R.mipmap.ic_launcher);
 
-        List<Integer> lstImages = new ArrayList<>();
+        List<Integer> lstImages;
         lstImages = ImageUtil.getImageList();
 
         this.vh.relativePhotoContent  = (RelativeLayout) findViewById(R.id.relativePhotoContentDraw);
@@ -78,7 +78,10 @@ public class MainActivity extends AppCompatActivity
         this.vh.btnRotateRight = (ImageView) findViewById(R.id.btnRotateRight);
         this.vh.btnFinish = (ImageView) findViewById(R.id.btnFinish);
         this.vh.btnRemove = (ImageView) findViewById(R.id.btnRemove);
+        this.vh.imagePhoto = (ImageView) findViewById(R.id.imgPhoto);
+
         this.vh.relativePhotoContent = (RelativeLayout) findViewById(R.id.relativePhotoContentDraw);
+
 
         this.setListeners();
 
@@ -172,8 +175,9 @@ public class MainActivity extends AppCompatActivity
 
                 if (!PermitionUtil.hasCameraPermition(this)) {
                     PermitionUtil.asksCameraPermitions(this);
+                } else {
+                    dispatchTakePictureIntent();
                 }
-                dispatchTakePictureIntent();
                 break;
 
             case R.id.btnZoomIn:
@@ -203,6 +207,35 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PermitionUtil.CAMERA_PERMISSION && resultCode == RESULT_OK){
+            this.setPhotoAsBackground();
+        }
+    }
+
+    private void setPhotoAsBackground() {
+        int targetW = this.vh.imagePhoto.getWidth();
+        int targetH = this.vh.imagePhoto.getHeight();
+
+        BitmapFactory.Options options = new BitmapFactory.Options();
+        options.inJustDecodeBounds = true;
+        BitmapFactory.decodeFile(this.vh.uriPhotoPath.getPath(), options);
+
+        int photoW = options.outWidth;
+        int photoH = options.outHeight;
+
+        int scaleFactor = Math.min(photoW/targetW, photoH / targetH);
+
+        options.inJustDecodeBounds = false;
+        options.inSampleSize = scaleFactor;
+
+        Bitmap bitmap = BitmapFactory.decodeFile(this.vh.uriPhotoPath.getPath(), options);
+        Bitmap bitmapRotated = ImageUtil.rotateImageIfRequired(bitmap, this.vh.uriPhotoPath);
+
+        this.vh.imagePhoto.setImageBitmap(bitmapRotated);
+    }
+
+    @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         if (requestCode == PermitionUtil.CAMERA_PERMISSION){
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
@@ -213,7 +246,7 @@ public class MainActivity extends AppCompatActivity
                         .setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                dialog.dismiss(); 
+                                dialog.dismiss();
                             }
                         }).show();
             }
@@ -290,6 +323,7 @@ public class MainActivity extends AppCompatActivity
         ImageView btnRotateRight;
         ImageView btnFinish;
         ImageView btnRemove;
+        ImageView imagePhoto;
 
         RelativeLayout relativePhotoContent;
         Uri uriPhotoPath;
