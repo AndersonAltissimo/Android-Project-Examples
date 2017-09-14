@@ -1,25 +1,37 @@
 package com.devmasterteam.photicker.views;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.MediaStore;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.devmasterteam.photicker.R;
 import com.devmasterteam.photicker.utils.LongEventType;
 import com.devmasterteam.photicker.utils.ImageUtil;
+import com.devmasterteam.photicker.utils.PermitionUtil;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener, View.OnLongClickListener, View.OnTouchListener {
 
+    private static final int REQUEST_TAKE_PHOTO = 2;
     private final ViewHolder vh = new ViewHolder();
     private ImageView imageSelected;
     private boolean autoIncrement;
@@ -79,6 +91,7 @@ public class MainActivity extends AppCompatActivity
         findViewById(R.id.btnRotateRight).setOnClickListener(this);
         findViewById(R.id.btnFinish).setOnClickListener(this);
         findViewById(R.id.btnRemove).setOnClickListener(this);
+        findViewById(R.id.imgTakePhoto).setOnClickListener(this);
 
         findViewById(R.id.btnZoomIn).setOnLongClickListener(this);
         findViewById(R.id.btnZoomOut).setOnLongClickListener(this);
@@ -131,7 +144,7 @@ public class MainActivity extends AppCompatActivity
                                 image.setY(y);
                                 break;
 
-                            case  MotionEvent.ACTION_UP :
+                            case  MotionEvent.ACTION_UP:
                                 break;
                         }
                         return true;
@@ -155,6 +168,14 @@ public class MainActivity extends AppCompatActivity
     public void onClick(View v) {
 
         switch (v.getId()){
+            case R.id.imgTakePhoto:
+
+                if (!PermitionUtil.hasCameraPermition(this)) {
+                    PermitionUtil.asksCameraPermitions(this);
+                }
+                dispatchTakePictureIntent();
+                break;
+
             case R.id.btnZoomIn:
                 ImageUtil.handleZoomIn(this.imageSelected);
                 break;
@@ -178,6 +199,44 @@ public class MainActivity extends AppCompatActivity
             case R.id.btnRemove:
                 this.vh.relativePhotoContent.removeView(this.imageSelected);
                 break;
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        if (requestCode == PermitionUtil.CAMERA_PERMISSION){
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                dispatchTakePictureIntent();
+            } else {
+                new AlertDialog.Builder(this)
+                        .setMessage(getString(R.string.without_permission_camera_explanation))
+                        .setPositiveButton(R.string.btn_ok, new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss(); 
+                            }
+                        }).show();
+            }
+        }
+    }
+
+    private void dispatchTakePictureIntent() {
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+        if (intent.resolveActivity(getPackageManager()) != null){
+            File photoFile = null;
+
+            try {
+                photoFile = ImageUtil.createImageFile(this);
+                this.vh.uriPhotoPath = Uri.fromFile(photoFile);
+            } catch (IOException e) {
+                Toast.makeText(this, "Não foi possivel iniciar a Camera.", Toast.LENGTH_SHORT).show();
+            }
+
+            if (photoFile != null){
+                intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(photoFile));
+                startActivityForResult(intent, REQUEST_TAKE_PHOTO);
+            }
         }
 
     }
@@ -233,6 +292,7 @@ public class MainActivity extends AppCompatActivity
         ImageView btnRemove;
 
         RelativeLayout relativePhotoContent;
+        Uri uriPhotoPath;
     }
 
     private class RptUpdater implements Runnable{
