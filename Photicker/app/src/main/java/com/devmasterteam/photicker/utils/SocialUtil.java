@@ -32,6 +32,43 @@ public class SocialUtil {
     }
 
     public static void shareImageOnInstagram(MainActivity mainActivity, RelativeLayout relativePhotoContent, View v) {
+        PackageManager pkManager = mainActivity.getPackageManager();
+
+        try {
+            pkManager.getPackageInfo("com.instagram.android", 0);
+
+            try {
+                Bitmap image = ImageUtil.drawBitmap(relativePhotoContent);
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+
+                image.compress(Bitmap.CompressFormat.JPEG, 100, outputStream);
+
+                File file = new File(Environment.getExternalStorageDirectory()+ File.separator + "temp_file.jpg");
+
+                try {
+                    file.createNewFile();
+                    FileOutputStream fo = new FileOutputStream(file);
+                    fo.write(outputStream.toByteArray());
+
+                    Intent sendIntent = new Intent();
+                    sendIntent.setAction(Intent.ACTION_SEND);
+                    sendIntent.putExtra(Intent.EXTRA_STREAM, Uri.parse("file:///sdcard/temp_fiel.jpg"));
+                    sendIntent.setType("image/*");
+                    sendIntent.setPackage("com.instragram.android");
+
+                    v.getContext().startActivity(Intent.createChooser(sendIntent, mainActivity.getString(R.string.share_image)));
+
+                } catch (FileNotFoundException e) {
+                    Toast.makeText(mainActivity, R.string.unexpected_error, Toast.LENGTH_SHORT).show();
+                } catch (IOException e) {
+                    Toast.makeText(mainActivity, R.string.unexpected_error, Toast.LENGTH_SHORT).show();
+                }
+            } catch (Exception e){
+                Toast.makeText(mainActivity, R.string.instagram_not_installed, Toast.LENGTH_SHORT).show();
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            Toast.makeText(mainActivity, R.string.instagram_not_installed, Toast.LENGTH_SHORT).show();
+        }
     }
 
     public static void shareImageOnTwitter(MainActivity mainActivity, RelativeLayout relativePhotoContent, View v) {
