@@ -223,7 +223,8 @@ public class ImageUtil {
     }
 
     public static Bitmap drawBitmap(RelativeLayout relativePhotoContent) {
+        relativePhotoContent.setDrawingCacheEnabled(true);
 
-    
+        return relativePhotoContent.getDrawingCache();
     }
 }
