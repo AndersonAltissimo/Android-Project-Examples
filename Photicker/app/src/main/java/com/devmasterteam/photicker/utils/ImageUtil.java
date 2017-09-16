@@ -164,7 +164,9 @@ public class ImageUtil {
     }
 
     public static void handleZoomOut(ImageView imageSelected) {
-        if (imageSelected.getWidth() > 50){ return; }
+        if (imageSelected.getWidth() < 50){
+            return;
+        }
 
         ViewGroup.LayoutParams params = imageSelected.getLayoutParams();
         params.width = (int) (imageSelected.getWidth() - (imageSelected.getWidth() * 0.1));

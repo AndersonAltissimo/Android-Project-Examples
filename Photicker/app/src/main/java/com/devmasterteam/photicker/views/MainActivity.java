@@ -154,7 +154,7 @@ public class MainActivity extends AppCompatActivity
                                 relativeLayout.getLocationOnScreen(coords);
 
                                 x = (event.getRawX() - (image.getWidth() / 2));
-                                y = (event.getRawY() - (coords[1] + 100) + (image.getHeight() / 2));
+                                y = event.getRawY() - ((coords[1] - 100) + (image.getHeight() / 2));
                                 image.setX(x);
                                 image.setY(y);
                                 break;
@@ -235,7 +235,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PermitionUtil.CAMERA_PERMISSION && resultCode == RESULT_OK) {
+        if (requestCode == REQUEST_TAKE_PHOTO && resultCode == RESULT_OK) {
             this.setPhotoAsBackground();
         }
     }
@@ -308,6 +308,7 @@ public class MainActivity extends AppCompatActivity
             case R.id.btnZoomIn:
                 this.longEventType = LongEventType.ZoomIn;
                 break;
+
             case R.id.btnZoomOut:
                 this.longEventType = LongEventType.ZoomOut;
                 break;
@@ -373,6 +374,7 @@ public class MainActivity extends AppCompatActivity
                 switch (longEventType) {
                     case ZoomIn:
                         ImageUtil.handleZoomIn(imageSelected);
+                        break;
                     case ZoomOut:
                         ImageUtil.handleZoomOut(imageSelected);
                         break;
