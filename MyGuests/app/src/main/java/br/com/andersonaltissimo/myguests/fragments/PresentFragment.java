@@ -1,4 +1,4 @@
-package br.com.andersonaltissimo.myguests.fragment;
+package br.com.andersonaltissimo.myguests.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

@@ -1,6 +1,8 @@
-package br.com.andersonaltissimo.myguests;
+package br.com.andersonaltissimo.myguests.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,20 +13,26 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
-import br.com.andersonaltissimo.myguests.fragment.AllInvitedFragment;
-import br.com.andersonaltissimo.myguests.fragment.PresentFragment;
+import br.com.andersonaltissimo.myguests.R;
+import br.com.andersonaltissimo.myguests.fragments.AllInvitedFragment;
+import br.com.andersonaltissimo.myguests.fragments.PresentFragment;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {
+
+    private ViewHolder vh = new ViewHolder();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        this.vh.fabNewGuest = (FloatingActionButton) findViewById(R.id.fab_new_guest);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -34,7 +42,13 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        this.setListeners();
+
         this.startDefaultFragment();
+    }
+
+    private void setListeners() {
+        this.vh.fabNewGuest.setOnClickListener(this);
     }
 
     private void startDefaultFragment() {
@@ -117,5 +131,18 @@ public class MainActivity extends AppCompatActivity
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    @Override
+    public void onClick(View view) {
+        int id = view.getId();
+
+        if (id == R.id.fab_new_guest){
+            startActivity(new Intent(this, GuestFormActivity.class));
+        }
+    }
+
+    private static class ViewHolder{
+        FloatingActionButton fabNewGuest;
     }
 }
