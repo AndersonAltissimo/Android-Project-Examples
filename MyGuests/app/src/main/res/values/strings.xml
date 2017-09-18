@@ -1,8 +1,14 @@
 <resources>
     <string name="app_name">MyGuests</string>
 
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Abrir Menu</string>
+    <string name="navigation_drawer_close">Fechar Menu</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="configuracoes">Configurações</string>
+    <string name="todos">Todos</string>
+    <string name="presentes">Presentes</string>
+    <string name="ausentes">Ausentes</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
