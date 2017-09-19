@@ -18,6 +18,7 @@ public class GuestFormActivity extends AppCompatActivity implements View.OnClick
 
     private ViewHolder vh = new ViewHolder();
     private GuestBusiness guestBusiness;
+    private int guestId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,37 @@ public class GuestFormActivity extends AppCompatActivity implements View.OnClick
         this.vh.btnSave = (Button) findViewById(R.id.btn_save);
 
         this.setListeners();
+
+        this.loadDataFormActivity();
+    }
+
+    private void loadDataFormActivity() {
+        Bundle bundle = getIntent().getExtras();
+
+        if (bundle != null){
+            this.guestId = bundle.getInt(GuestConstants.BundleConstants.GUEST_ID);
+            Guest guest = this.guestBusiness.load(this.guestId);
+
+            this.vh.nameGuest.setText(guest.getName());
+
+            if (guest.getConfirmed() == GuestConstants.CONFIRMATION.NOT_CONFIRMED){
+                this.vh.notConfirmed.setChecked(true);
+            } else if (guest.getConfirmed() == GuestConstants.CONFIRMATION.PRESENT){
+                this.vh.present.setChecked(true);
+            } else {
+                this.vh.absent.setChecked(true);
+            }
+
+            if (this.vh.notConfirmed.isChecked()){
+                guest.setConfirmed(GuestConstants.CONFIRMATION.NOT_CONFIRMED);
+            } else if (this.vh.present.isChecked()){
+                guest.setConfirmed(GuestConstants.CONFIRMATION.PRESENT);
+            } else {
+                guest.setConfirmed(GuestConstants.CONFIRMATION.ABSENT);
+            }
+
+
+        }
     }
 
     @Override

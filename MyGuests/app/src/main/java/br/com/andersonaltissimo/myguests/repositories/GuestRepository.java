@@ -69,4 +69,43 @@ public class GuestRepository {
 
         return lst;
     }
+
+    public Guest load(int id) {
+        Guest guest = new Guest();
+
+        try {
+            SQLiteDatabase sqLiteDatabase = this.guestDatabaseHelper.getReadableDatabase();
+
+            String[] projection = {
+                    DatabaseConstants.GUEST.COLUMNS.ID,
+                    DatabaseConstants.GUEST.COLUMNS.NAME,
+                    DatabaseConstants.GUEST.COLUMNS.PRESENCE
+            };
+
+            String selection = DatabaseConstants.GUEST.COLUMNS.ID + " = ?";
+
+            String[] selectionArgs = {
+                    String.valueOf(id)
+            };
+
+            Cursor cursor = sqLiteDatabase.query(DatabaseConstants.GUEST.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
+
+            if (cursor != null && cursor.getCount() > 0){
+                cursor.moveToFirst();
+
+                guest.setId(cursor.getInt(cursor.getColumnIndex(DatabaseConstants.GUEST.COLUMNS.ID)));
+                guest.setName(cursor.getString(cursor.getColumnIndex(DatabaseConstants.GUEST.COLUMNS.NAME)));
+                guest.setConfirmed(cursor.getInt(cursor.getColumnIndex(DatabaseConstants.GUEST.COLUMNS.PRESENCE)));
+            }
+
+            if (cursor != null){
+                cursor.close();
+            }
+
+            return guest;
+
+        } catch ( Exception e) {
+            return guest;
+        }
+    }
 }

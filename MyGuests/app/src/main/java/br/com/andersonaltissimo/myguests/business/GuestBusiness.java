@@ -22,4 +22,8 @@ public class GuestBusiness {
     public List<Guest> getInvited() {
         return this.guestRepository.getGuestByQuery("select * from " + DatabaseConstants.GUEST.TABLE_NAME);
     }
+
+    public Guest load(int id) {
+        return this.guestRepository.load(id);
+    }
 }
