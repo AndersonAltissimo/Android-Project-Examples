@@ -6,19 +6,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import br.com.andersonaltissimo.myguests.R;
 import br.com.andersonaltissimo.myguests.entities.Guest;
+import br.com.andersonaltissimo.myguests.listeners.OnGuestInteractionListener;
 import br.com.andersonaltissimo.myguests.viewholders.GuestViewHolder;
 
 public class GuestListAdapter extends RecyclerView.Adapter<GuestViewHolder>{
 
     private List<Guest> guestList;
+    private OnGuestInteractionListener listener;
 
-    public GuestListAdapter(List<Guest> lstGuest) {
+    public GuestListAdapter(List<Guest> lstGuest, OnGuestInteractionListener listener) {
         this.guestList = lstGuest;
+        this.listener = listener;
     }
 
     @Override
@@ -34,7 +36,7 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestViewHolder>{
     @Override
     public void onBindViewHolder(GuestViewHolder holder, int position) {
         Guest guest = this.guestList.get(position);
-        holder.bindData(guest);
+        holder.bindData(guest, this.listener);
     }
 
     @Override
