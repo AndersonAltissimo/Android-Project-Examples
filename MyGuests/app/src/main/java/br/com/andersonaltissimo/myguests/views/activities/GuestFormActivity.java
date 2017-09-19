@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioButton;
+import android.widget.Toast;
 
 import br.com.andersonaltissimo.myguests.R;
 import br.com.andersonaltissimo.myguests.business.GuestBusiness;
@@ -46,6 +47,12 @@ public class GuestFormActivity extends AppCompatActivity implements View.OnClick
     }
 
     private void handleSave() {
+
+        if (!this.validateSave()){
+            return;
+        }
+
+
         Guest guest = new Guest();
         guest.setName(this.vh.nameGuest.getText().toString());
 
@@ -57,7 +64,22 @@ public class GuestFormActivity extends AppCompatActivity implements View.OnClick
             guest.setConfirmed(GuestConstants.CONFIRMATION.ABSENT);
         }
 
-        this.guestBusiness.Insert(guest);   
+        if (this.guestBusiness.Insert(guest)){
+            Toast.makeText(this, R.string.guest_saved, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(this, R.string.guest_error_save, Toast.LENGTH_SHORT).show();
+        }
+
+        finish();
+    }
+
+    private boolean validateSave() {
+        if (this.vh.nameGuest.getText().toString().trim().equals("")){
+            this.vh.nameGuest.setError(getString(R.string.name_obrigatorio));
+            return false;
+        }
+
+        return true;
     }
 
     private static class ViewHolder {

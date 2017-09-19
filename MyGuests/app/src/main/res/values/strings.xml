@@ -16,4 +16,7 @@
     <string name="presente">Presente</string>
     <string name="ausente">Ausente</string>
     <string name="salvar">Salvar</string>
+    <string name="name_obrigatorio">Nome é Obrigatorio</string>
+    <string name="guest_saved">Convidado salvo com Sucesso !</string>
+    <string name="guest_error_save">Algo de errado Aconteceu !</string>
 </resources>
