@@ -5,10 +5,8 @@ import android.view.View;
 import android.widget.TextView;
 
 import br.com.andersonaltissimo.myguests.R;
+import br.com.andersonaltissimo.myguests.entities.Guest;
 
-/**
- * Created by anderson on 18/09/17.
- */
 
 public class GuestViewHolder extends RecyclerView.ViewHolder {
 
@@ -18,5 +16,9 @@ public class GuestViewHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         this.textName = (TextView) itemView.findViewById(R.id.textView);
+    }
+
+    public void bindData(Guest guest) {
+        this.textName.setText(guest.getName());
     }
 }

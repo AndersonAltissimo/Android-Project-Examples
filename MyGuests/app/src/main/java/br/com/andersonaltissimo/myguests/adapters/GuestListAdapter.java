@@ -6,10 +6,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import br.com.andersonaltissimo.myguests.R;
+import br.com.andersonaltissimo.myguests.entities.Guest;
 import br.com.andersonaltissimo.myguests.viewholders.GuestViewHolder;
 
 public class GuestListAdapter extends RecyclerView.Adapter<GuestViewHolder>{
+
+    private List<Guest> guestList;
+
+    public GuestListAdapter(List<Guest> lstGuest) {
+        this.guestList = lstGuest;
+    }
 
     @Override
     public GuestViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -23,11 +33,12 @@ public class GuestListAdapter extends RecyclerView.Adapter<GuestViewHolder>{
 
     @Override
     public void onBindViewHolder(GuestViewHolder holder, int position) {
-
+        Guest guest = this.guestList.get(position);
+        holder.bindData(guest);
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return this.guestList.size();
     }
 }
