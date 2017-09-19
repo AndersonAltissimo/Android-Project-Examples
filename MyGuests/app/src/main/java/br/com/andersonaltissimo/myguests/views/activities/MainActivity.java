@@ -1,4 +1,4 @@
-package br.com.andersonaltissimo.myguests.activities;
+package br.com.andersonaltissimo.myguests.views.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,8 +16,8 @@ import android.view.MenuItem;
 import android.view.View;
 
 import br.com.andersonaltissimo.myguests.R;
-import br.com.andersonaltissimo.myguests.fragments.AllInvitedFragment;
-import br.com.andersonaltissimo.myguests.fragments.PresentFragment;
+import br.com.andersonaltissimo.myguests.views.fragments.AllInvitedFragment;
+import br.com.andersonaltissimo.myguests.views.fragments.PresentFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, View.OnClickListener {

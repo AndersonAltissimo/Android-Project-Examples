@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="br.com.andersonaltissimo.myguests.activities.GuestFormActivity">
+    tools:context="br.com.andersonaltissimo.myguests.views.activities.GuestFormActivity">
 
 
     <TextView
