@@ -58,7 +58,6 @@ public class AllInvitedFragment extends Fragment {
             }
         };
 
-
         List<Guest> lstGuest = this.guestBusiness.getInvited();
 
         //Obter RecycleView
@@ -68,13 +67,12 @@ public class AllInvitedFragment extends Fragment {
         GuestListAdapter guestListAdapter = new GuestListAdapter(lstGuest, listener);
         this.vh.recyclerView.setAdapter(guestListAdapter);
 
-
         //Definir um Layout
         this.vh.recyclerView.setLayoutManager(new LinearLayoutManager(context));
         return view;
     }
 
-    public static class ViewHolder {
+    private static class ViewHolder {
         RecyclerView recyclerView;
     }
 }

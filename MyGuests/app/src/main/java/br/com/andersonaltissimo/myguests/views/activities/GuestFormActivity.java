@@ -62,8 +62,6 @@ public class GuestFormActivity extends AppCompatActivity implements View.OnClick
             } else {
                 guest.setConfirmed(GuestConstants.CONFIRMATION.ABSENT);
             }
-
-
         }
     }
 
@@ -83,7 +81,6 @@ public class GuestFormActivity extends AppCompatActivity implements View.OnClick
         if (!this.validateSave()){
             return;
         }
-
 
         Guest guest = new Guest();
         guest.setName(this.vh.nameGuest.getText().toString());
