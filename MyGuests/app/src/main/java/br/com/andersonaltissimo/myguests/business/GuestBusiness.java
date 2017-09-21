@@ -41,4 +41,8 @@ public class GuestBusiness {
     public boolean update(Guest guest) {
         return this.guestRepository.update(guest);
     }
+
+    public boolean remove(int id) {
+        return this.guestRepository.remove(id);
+    }
 }

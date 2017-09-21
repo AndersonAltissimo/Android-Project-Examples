@@ -19,4 +19,8 @@
     <string name="name_obrigatorio">Nome é Obrigatorio</string>
     <string name="guest_saved">Convidado salvo com Sucesso !</string>
     <string name="guest_error_save">Algo de errado Aconteceu !</string>
+    <string name="remove_guest_title_alert">Remoção de Convidado</string>
+    <string name="remove_guest_text_alert">Deseja remover o Convidado ?</string>
+    <string name="yes">Sim</string>
+    <string name="no">Não</string>
 </resources>

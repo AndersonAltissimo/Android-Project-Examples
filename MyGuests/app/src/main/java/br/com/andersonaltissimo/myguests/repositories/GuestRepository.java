@@ -130,7 +130,24 @@ public class GuestRepository {
         }catch (Exception e){
             return false;
         }
+    }
 
+    public boolean remove(int id) {
+        try {
 
+            SQLiteDatabase sqLiteDatabase = this.guestDatabaseHelper.getWritableDatabase();
+
+            String whereClause = DatabaseConstants.GUEST.COLUMNS.ID + " = ?";
+
+            String[] whereArgs = {
+                    String.valueOf(id)
+            };
+
+            sqLiteDatabase.delete(DatabaseConstants.GUEST.TABLE_NAME, whereClause, whereArgs);
+            return true;
+
+        }catch (Exception e){
+            return false;
+        }
     }
 }

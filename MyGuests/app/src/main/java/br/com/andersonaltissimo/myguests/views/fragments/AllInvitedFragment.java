@@ -54,7 +54,7 @@ public class AllInvitedFragment extends Fragment {
 
             @Override
             public void onDeleteClick(int id) {
-
+               boolean deletou =  guestBusiness.remove(id);
             }
         };
 
