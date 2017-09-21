@@ -16,7 +16,7 @@ public class GuestBusiness {
         this.guestRepository = GuestRepository.getInstance(context);
     }
 
-    public Boolean Insert(Guest guest){
+    public Boolean insert(Guest guest){
         return this.guestRepository.insert(guest);
     }
 
@@ -36,5 +36,9 @@ public class GuestBusiness {
 
     public Guest load(int id) {
         return this.guestRepository.load(id);
+    }
+
+    public boolean update(Guest guest) {
+        return this.guestRepository.update(guest);
     }
 }

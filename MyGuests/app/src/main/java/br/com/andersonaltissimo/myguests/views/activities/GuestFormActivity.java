@@ -18,7 +18,7 @@ public class GuestFormActivity extends AppCompatActivity implements View.OnClick
 
     private ViewHolder vh = new ViewHolder();
     private GuestBusiness guestBusiness;
-    private int guestId;
+    private int guestId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,10 +93,20 @@ public class GuestFormActivity extends AppCompatActivity implements View.OnClick
             guest.setConfirmed(GuestConstants.CONFIRMATION.ABSENT);
         }
 
-        if (this.guestBusiness.Insert(guest)){
-            Toast.makeText(this, R.string.guest_saved, Toast.LENGTH_SHORT).show();
+        if (this.guestId == 0){
+            if (this.guestBusiness.insert(guest)){
+                Toast.makeText(this, R.string.guest_saved, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.guest_error_save, Toast.LENGTH_SHORT).show();
+            }
         } else {
-            Toast.makeText(this, R.string.guest_error_save, Toast.LENGTH_SHORT).show();
+            guest.setId(guestId);
+
+            if (this.guestBusiness.update(guest)){
+                Toast.makeText(this, R.string.guest_saved, Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(this, R.string.guest_error_save, Toast.LENGTH_SHORT).show();
+            }
         }
 
         finish();
