@@ -1,11 +1,74 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".views.fragments.AllInvitedFragment">
 
+
+    <LinearLayout
+        android:id="@+id/linear_dashboard"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/presentes" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/ausentes" />
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/total" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/qtd_present"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="@string/presentes" />
+
+            <TextView
+                android:id="@+id/qtd_absent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="@string/ausentes" />
+
+            <TextView
+                android:id="@+id/qtd_all_invited"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                tools:text="@string/total" />
+        </LinearLayout>
+
+
+    </LinearLayout>
+
     <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycle_all_invited"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recycle_all_invited"/>
-</FrameLayout>
+        android:layout_below="@id/linear_dashboard" />
+</RelativeLayout>

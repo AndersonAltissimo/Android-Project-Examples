@@ -23,4 +23,5 @@
     <string name="remove_guest_text_alert">Deseja remover o Convidado ?</string>
     <string name="yes">Sim</string>
     <string name="no">Não</string>
+    <string name="total">Total</string>
 </resources>

@@ -7,6 +7,7 @@ import java.util.List;
 import br.com.andersonaltissimo.myguests.constants.DatabaseConstants;
 import br.com.andersonaltissimo.myguests.constants.GuestConstants;
 import br.com.andersonaltissimo.myguests.entities.Guest;
+import br.com.andersonaltissimo.myguests.entities.GuestCount;
 import br.com.andersonaltissimo.myguests.repositories.GuestRepository;
 
 public class GuestBusiness {
@@ -44,5 +45,9 @@ public class GuestBusiness {
 
     public boolean remove(int id) {
         return this.guestRepository.remove(id);
+    }
+
+    public GuestCount loadDashboard() {
+        return this.guestRepository.loadDashboard();
     }
 }

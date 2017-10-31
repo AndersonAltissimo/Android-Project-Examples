@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import br.com.andersonaltissimo.myguests.adapters.GuestListAdapter;
 import br.com.andersonaltissimo.myguests.business.GuestBusiness;
 import br.com.andersonaltissimo.myguests.constants.GuestConstants;
 import br.com.andersonaltissimo.myguests.entities.Guest;
+import br.com.andersonaltissimo.myguests.entities.GuestCount;
 import br.com.andersonaltissimo.myguests.listeners.OnGuestInteractionListener;
 import br.com.andersonaltissimo.myguests.views.activities.GuestFormActivity;
 
@@ -54,7 +56,7 @@ public class AllInvitedFragment extends Fragment {
 
             @Override
             public void onDeleteClick(int id) {
-               boolean deletou =  guestBusiness.remove(id);
+                boolean deletou = guestBusiness.remove(id);
             }
         };
 
@@ -69,10 +71,29 @@ public class AllInvitedFragment extends Fragment {
 
         //Definir um Layout
         this.vh.recyclerView.setLayoutManager(new LinearLayoutManager(context));
+
+
+        this.vh.qtd_absent = view.findViewById(R.id.qtd_absent);
+        this.vh.qtd_present = view.findViewById(R.id.qtd_present);
+        this.vh.qtd_all_invited = view.findViewById(R.id.qtd_all_invited);
+
+        this.loadDashboard();
         return view;
+
+    }
+
+    private void loadDashboard() {
+        GuestCount guestCount = this.guestBusiness.loadDashboard();
+
+        this.vh.qtd_all_invited.setText(String.valueOf(guestCount.getAllInvitedCount()));
+        this.vh.qtd_present.setText(String.valueOf(guestCount.getPresentCount()));
+        this.vh.qtd_absent.setText(String.valueOf(guestCount.getAbsentCount()));
     }
 
     private static class ViewHolder {
         RecyclerView recyclerView;
+        TextView qtd_present;
+        TextView qtd_absent;
+        TextView qtd_all_invited;
     }
 }

@@ -9,18 +9,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.com.andersonaltissimo.myguests.constants.DatabaseConstants;
+import br.com.andersonaltissimo.myguests.constants.GuestConstants;
 import br.com.andersonaltissimo.myguests.entities.Guest;
+import br.com.andersonaltissimo.myguests.entities.GuestCount;
 
 public class GuestRepository {
     private static GuestRepository INSTANCE;
     private GuestDatabaseHelper guestDatabaseHelper;
 
-    private GuestRepository(Context context){
+    private GuestRepository(Context context) {
         this.guestDatabaseHelper = new GuestDatabaseHelper(context);
     }
 
-    public static synchronized GuestRepository getInstance(Context context){
-        if (INSTANCE == null){
+    public static synchronized GuestRepository getInstance(Context context) {
+        if (INSTANCE == null) {
             INSTANCE = new GuestRepository(context);
         }
         return INSTANCE;
@@ -36,7 +38,7 @@ public class GuestRepository {
 
             sqLiteDatabase.insert(DatabaseConstants.GUEST.TABLE_NAME, null, values);
             return true;
-        } catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -48,8 +50,8 @@ public class GuestRepository {
             SQLiteDatabase sqLiteDatabase = this.guestDatabaseHelper.getReadableDatabase();
             Cursor cursor = sqLiteDatabase.rawQuery(query, null);
 
-            if (cursor != null && cursor.getCount() > 0){
-                while (cursor.moveToNext()){
+            if (cursor != null && cursor.getCount() > 0) {
+                while (cursor.moveToNext()) {
                     Guest guest = new Guest();
                     guest.setId(cursor.getInt(cursor.getColumnIndex(DatabaseConstants.GUEST.COLUMNS.ID)));
                     guest.setName(cursor.getString(cursor.getColumnIndex(DatabaseConstants.GUEST.COLUMNS.NAME)));
@@ -59,11 +61,11 @@ public class GuestRepository {
                 }
             }
 
-            if (cursor != null){
+            if (cursor != null) {
                 cursor.close();
             }
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return lst;
         }
 
@@ -90,7 +92,7 @@ public class GuestRepository {
 
             Cursor cursor = sqLiteDatabase.query(DatabaseConstants.GUEST.TABLE_NAME, projection, selection, selectionArgs, null, null, null);
 
-            if (cursor != null && cursor.getCount() > 0){
+            if (cursor != null && cursor.getCount() > 0) {
                 cursor.moveToFirst();
 
                 guest.setId(cursor.getInt(cursor.getColumnIndex(DatabaseConstants.GUEST.COLUMNS.ID)));
@@ -98,13 +100,13 @@ public class GuestRepository {
                 guest.setConfirmed(cursor.getInt(cursor.getColumnIndex(DatabaseConstants.GUEST.COLUMNS.PRESENCE)));
             }
 
-            if (cursor != null){
+            if (cursor != null) {
                 cursor.close();
             }
 
             return guest;
 
-        } catch ( Exception e) {
+        } catch (Exception e) {
             return guest;
         }
     }
@@ -127,7 +129,7 @@ public class GuestRepository {
 
             return true;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
@@ -146,8 +148,41 @@ public class GuestRepository {
             sqLiteDatabase.delete(DatabaseConstants.GUEST.TABLE_NAME, whereClause, whereArgs);
             return true;
 
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
+    }
+
+    public GuestCount loadDashboard() {
+
+        GuestCount guestCount = new GuestCount(0, 0, 0);
+
+        try {
+
+            guestCount.setPresentCount(this.countGuestInformation(GuestConstants.CONFIRMATION.PRESENT));
+            guestCount.setAbsentCount(this.countGuestInformation(GuestConstants.CONFIRMATION.ABSENT));
+            guestCount.setAllInvitedCount(this.countGuestInformation(GuestConstants.CONFIRMATION.NOT_CONFIRMED));
+
+        } catch (Exception e) {
+            return guestCount;
+        }
+        return guestCount;
+    }
+
+    private int countGuestInformation(int tipo) {
+
+        SQLiteDatabase sqLiteDatabase = this.guestDatabaseHelper.getReadableDatabase();
+
+        String query = "select count(*) from " + DatabaseConstants.GUEST.TABLE_NAME +
+                " where " + DatabaseConstants.GUEST.COLUMNS.PRESENCE + " = " + tipo;
+
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+
+            return cursor.getInt(0);
+        }
+        return 0;
     }
 }
