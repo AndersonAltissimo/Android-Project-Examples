@@ -24,13 +24,31 @@ import br.com.andersonaltissimo.myguests.views.activities.GuestFormActivity;
 
 
 public class AllInvitedFragment extends Fragment {
-
     private ViewHolder vh = new ViewHolder();
     private GuestBusiness guestBusiness;
+    private OnGuestInteractionListener onGuestInteractionListener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        this.loadDashboard();
+        this.loadGuests();
+    }
+
+    private void loadGuests() {
+        List<Guest> lstGuest = this.guestBusiness.getInvited();
+
+        // Definir um Adapter
+        GuestListAdapter guestListAdapter = new GuestListAdapter(lstGuest, this.onGuestInteractionListener);
+        this.vh.recyclerView.setAdapter(guestListAdapter);
+        guestListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -41,7 +59,7 @@ public class AllInvitedFragment extends Fragment {
 
         this.guestBusiness = new GuestBusiness(context);
 
-        OnGuestInteractionListener listener = new OnGuestInteractionListener() {
+       this.onGuestInteractionListener = new OnGuestInteractionListener() {
             @Override
             public void onListClick(int id) {
                 //Abrir Activity de Formulario
@@ -60,26 +78,17 @@ public class AllInvitedFragment extends Fragment {
             }
         };
 
-        List<Guest> lstGuest = this.guestBusiness.getInvited();
-
         //Obter RecycleView
         this.vh.recyclerView = (RecyclerView) view.findViewById(R.id.recycle_all_invited);
 
-        // Definir um Adapter
-        GuestListAdapter guestListAdapter = new GuestListAdapter(lstGuest, listener);
-        this.vh.recyclerView.setAdapter(guestListAdapter);
-
         //Definir um Layout
         this.vh.recyclerView.setLayoutManager(new LinearLayoutManager(context));
-
 
         this.vh.qtd_absent = view.findViewById(R.id.qtd_absent);
         this.vh.qtd_present = view.findViewById(R.id.qtd_present);
         this.vh.qtd_all_invited = view.findViewById(R.id.qtd_all_invited);
 
-        this.loadDashboard();
         return view;
-
     }
 
     private void loadDashboard() {

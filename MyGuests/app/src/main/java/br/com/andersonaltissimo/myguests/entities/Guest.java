@@ -5,6 +5,15 @@ public class Guest {
     private String name;
     private int confirmed;
 
+    public Guest(int id, String name, int confirmed) {
+        this.id = id;
+        this.name = name;
+        this.confirmed = confirmed;
+    }
+
+    public Guest() {
+    }
+
     public int getId() {
         return id;
     }

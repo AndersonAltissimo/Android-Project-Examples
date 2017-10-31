@@ -161,12 +161,26 @@ public class GuestRepository {
 
             guestCount.setPresentCount(this.countGuestInformation(GuestConstants.CONFIRMATION.PRESENT));
             guestCount.setAbsentCount(this.countGuestInformation(GuestConstants.CONFIRMATION.ABSENT));
-            guestCount.setAllInvitedCount(this.countGuestInformation(GuestConstants.CONFIRMATION.NOT_CONFIRMED));
+            guestCount.setAllInvitedCount(this.countGuestInformationTotal());
 
         } catch (Exception e) {
             return guestCount;
         }
         return guestCount;
+    }
+
+    private int countGuestInformationTotal() {
+        SQLiteDatabase sqLiteDatabase = this.guestDatabaseHelper.getReadableDatabase();
+
+        String query = "select count(*) from " + DatabaseConstants.GUEST.TABLE_NAME;
+        Cursor cursor = sqLiteDatabase.rawQuery(query, null);
+
+        if (cursor != null && cursor.getCount() > 0) {
+            cursor.moveToFirst();
+
+            return cursor.getInt(0);
+        }
+        return 0;
     }
 
     private int countGuestInformation(int tipo) {
@@ -183,6 +197,7 @@ public class GuestRepository {
 
             return cursor.getInt(0);
         }
+
         return 0;
     }
 }

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import br.com.andersonaltissimo.myguests.R;
+import br.com.andersonaltissimo.myguests.views.fragments.AbsentFragment;
 import br.com.andersonaltissimo.myguests.views.fragments.AllInvitedFragment;
 import br.com.andersonaltissimo.myguests.views.fragments.PresentFragment;
 
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_present) {
             fragmentClass = PresentFragment.class;
         } else if (id == R.id.nav_absent) {
-
+            fragmentClass = AbsentFragment.class;
         }
 
         try {
@@ -126,7 +127,6 @@ public class MainActivity extends AppCompatActivity
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.frame_content, fragment).commit();
-
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

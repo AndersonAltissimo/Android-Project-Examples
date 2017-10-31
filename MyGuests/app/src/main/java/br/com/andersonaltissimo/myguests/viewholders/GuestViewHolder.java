@@ -20,7 +20,7 @@ public class GuestViewHolder extends RecyclerView.ViewHolder {
     public GuestViewHolder(View itemView, Context context) {
         super(itemView);
 
-        this.textName = (TextView) itemView.findViewById(R.id.textView);
+        this.textName = (TextView) itemView.findViewById(R.id.txt_row_name);
         this.context = context;
     }
 
