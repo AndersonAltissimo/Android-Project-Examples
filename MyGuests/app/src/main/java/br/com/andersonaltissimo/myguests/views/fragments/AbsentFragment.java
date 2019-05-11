@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -24,10 +25,26 @@ public class AbsentFragment extends Fragment {
 
     private ViewHolder vh = new ViewHolder();
     private GuestBusiness guestBusiness;
+    private OnGuestInteractionListener listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.loadGuests();
+    }
+
+    private void loadGuests() {
+        List<Guest> lstGuest = this.guestBusiness.getAbsent();
+
+        // Definir um Adapter
+        GuestListAdapter guestListAdapter = new GuestListAdapter(lstGuest, listener);
+        this.vh.recyclerAbsent.setAdapter(guestListAdapter);
+        guestListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -39,7 +56,7 @@ public class AbsentFragment extends Fragment {
 
         this.guestBusiness = new GuestBusiness(context);
 
-        OnGuestInteractionListener listener = new OnGuestInteractionListener() {
+        this.listener = new OnGuestInteractionListener() {
             @Override
             public void onListClick(int id) {
                 //Abrir Activity de Formulario
@@ -54,18 +71,16 @@ public class AbsentFragment extends Fragment {
 
             @Override
             public void onDeleteClick(int id) {
+                boolean deletou = guestBusiness.remove(id);
 
+                Toast.makeText(getContext(), getString(R.string.guest_removed), Toast.LENGTH_LONG);
+
+                loadGuests();
             }
         };
 
-        List<Guest> lstGuest = this.guestBusiness.getAbsent();
-
         //Obter RecycleView
         this.vh.recyclerAbsent = (RecyclerView) view.findViewById(R.id.recycle_absent);
-
-        // Definir um Adapter
-        GuestListAdapter guestListAdapter = new GuestListAdapter(lstGuest, listener);
-        this.vh.recyclerAbsent.setAdapter(guestListAdapter);
 
         //Definir um Layout
         this.vh.recyclerAbsent.setLayoutManager(new LinearLayoutManager(context));

@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -17,6 +18,7 @@ import br.com.andersonaltissimo.myguests.adapters.GuestListAdapter;
 import br.com.andersonaltissimo.myguests.business.GuestBusiness;
 import br.com.andersonaltissimo.myguests.constants.GuestConstants;
 import br.com.andersonaltissimo.myguests.entities.Guest;
+import br.com.andersonaltissimo.myguests.entities.GuestCount;
 import br.com.andersonaltissimo.myguests.listeners.OnGuestInteractionListener;
 import br.com.andersonaltissimo.myguests.views.activities.GuestFormActivity;
 
@@ -24,10 +26,27 @@ public class PresentFragment extends Fragment {
 
     private ViewHolder vh = new ViewHolder();
     private GuestBusiness guestBusiness;
+    private OnGuestInteractionListener listener;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        this.loadGuests();
+    }
+
+    private void loadGuests() {
+
+        List<Guest> lstGuest = this.guestBusiness.getPresent();
+
+        // Definir um Adapter
+        GuestListAdapter guestListAdapter = new GuestListAdapter(lstGuest, listener);
+        this.vh.recyclerPresent.setAdapter(guestListAdapter);
+        guestListAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -38,7 +57,7 @@ public class PresentFragment extends Fragment {
 
         this.guestBusiness = new GuestBusiness(context);
 
-        OnGuestInteractionListener listener = new OnGuestInteractionListener() {
+        this.listener = new OnGuestInteractionListener() {
             @Override
             public void onListClick(int id) {
                 //Abrir Activity de Formulario
@@ -53,18 +72,16 @@ public class PresentFragment extends Fragment {
 
             @Override
             public void onDeleteClick(int id) {
+                boolean deletou = guestBusiness.remove(id);
 
+                Toast.makeText(getContext(), getString(R.string.guest_removed), Toast.LENGTH_LONG);
+
+                loadGuests();
             }
         };
 
-        List<Guest> lstGuest = this.guestBusiness.getPresent();
-
         //Obter RecycleView
         this.vh.recyclerPresent = (RecyclerView) view.findViewById(R.id.recycle_present);
-
-        // Definir um Adapter
-        GuestListAdapter guestListAdapter = new GuestListAdapter(lstGuest, listener);
-        this.vh.recyclerPresent.setAdapter(guestListAdapter);
 
         //Definir um Layout
         this.vh.recyclerPresent.setLayoutManager(new LinearLayoutManager(context));

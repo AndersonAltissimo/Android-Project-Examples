@@ -1,5 +1,6 @@
 package br.com.andersonaltissimo.myguests.views.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -59,7 +61,7 @@ public class AllInvitedFragment extends Fragment {
 
         this.guestBusiness = new GuestBusiness(context);
 
-       this.onGuestInteractionListener = new OnGuestInteractionListener() {
+        this.onGuestInteractionListener = new OnGuestInteractionListener() {
             @Override
             public void onListClick(int id) {
                 //Abrir Activity de Formulario
@@ -75,6 +77,11 @@ public class AllInvitedFragment extends Fragment {
             @Override
             public void onDeleteClick(int id) {
                 boolean deletou = guestBusiness.remove(id);
+
+                Toast.makeText(getContext(), getString(R.string.guest_removed), Toast.LENGTH_LONG);
+
+                loadDashboard();
+                loadGuests();
             }
         };
 
